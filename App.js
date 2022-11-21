@@ -1,6 +1,8 @@
-import { Text, StyleSheet, View, Image } from 'react-native'
+import {  StyleSheet } from 'react-native'
 import React from 'react';
 
+import { Provider } from 'react-redux';
+import { store } from './store/redux/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,26 +12,23 @@ import User from './screens/User';
 import Favourite from './screens/Favourite';
 import Details from './screens/Details';
 import TabIcon from './components/NavigationTab/TabIcon';
-import HeaderRightIcon from './components/NavigationTab/HeaderRightIcon';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function HomeStack(){
+
   return(
     <Stack.Navigator initialRouteName='Home' screenOptions={{headerTitleAlign: 'center', headerTitleStyle: {fontWeight: 'bold'}}}>
-      <Stack.Screen name='Home' component={Home} options={{headerRight: () => (
-                                                              <HeaderRightIcon name='bell-o'/>
-    )}}/>
-      <Stack.Screen name='Details' component={Details} options={{headerRight: () => (
-                                                              <HeaderRightIcon name='heart-o'/>
-    )}}/>
+      <Stack.Screen name='Home' component={Home}/>
+      <Stack.Screen name='Details' component={Details}/>
     </Stack.Navigator>
   )
 }
 
 export default function App() {
   return (
+    <Provider store={store}>
       <NavigationContainer>
         <Tab.Navigator screenOptions={{headerShown: false, tabBarStyle: styles.tabBarStyle}}>
           <Tab.Screen name='HomeTab' component={HomeStack} options={{
@@ -43,7 +42,11 @@ export default function App() {
                                                                   />
                                                                 )
           }}/>
-          <Tab.Screen name='CartCard' component={Cart} options={{
+          <Tab.Screen name='CartTab' component={Cart} options={{
+                                                                headerTitle: 'Cart',
+                                                                headerShown: true,
+                                                                headerTitleAlign: 'center',
+                                                                headerTitleStyle: {fontWeight: 'bold'},
                                                                 title: '',
                                                                 tabBarIcon: ({focused}) => (
                                                                   <TabIcon
@@ -54,7 +57,11 @@ export default function App() {
                                                                   />
                                                                 )
           }}/>
-          <Tab.Screen name='Favorite' component={Favourite} options={{
+          <Tab.Screen name='FavoriteTab' component={Favourite} options={{
+                                                                headerTitle: 'Favourite',
+                                                                headerShown: true,
+                                                                headerTitleAlign: 'center',
+                                                                headerTitleStyle: {fontWeight: 'bold'},
                                                                 title: '',
                                                                 tabBarIcon: ({focused}) => (
                                                                   <TabIcon
@@ -65,7 +72,7 @@ export default function App() {
                                                                   />
                                                                 )
           }}/>
-          <Tab.Screen name='User' component={User} options={{
+          <Tab.Screen name='UserTab' component={User} options={{
                                                         title: '',
                                                         tabBarIcon: ({focused}) => (
                                                           <TabIcon
@@ -78,6 +85,7 @@ export default function App() {
           }}/>
         </Tab.Navigator>
       </NavigationContainer>
+    </Provider>
   )
 }
 

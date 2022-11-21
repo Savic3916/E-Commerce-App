@@ -1,26 +1,42 @@
 import { ScrollView, Dimensions, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
-import { fetchFlashSalesProducts, fetchWinterArrivalProducts } from '../util/http';
+import { fetchCartProducts, fetchFavourites, fetchFlashSalesProducts, fetchWinterArrivalProducts } from '../util/http';
+import { setCart } from '../store/redux/e_commerceSlice';
+import { useSelector , useDispatch} from 'react-redux';
 import Card from '../components/HomeScreenComponents/Card';
 import TabHorizontalView from '../components/HomeScreenComponents/TabHorizontalView';
 import ProductView from '../components/HomeScreenComponents/ProductView';
 import LoadingOverlay from '../components/UI/LoadingOverlay';
+import Notifications from '../components/NavigationTab/Notifications';
 
-export default function Home() {
+export default function Home({ navigation }) {
+
+  // APP WIDE STATE 
+  const cartProducts = useSelector((state) => state.e_commerce.carts);
+  const dispatch = useDispatch();
 
   const [flashSales, setFlashSales] = useState([]);
   const [winterArrivals, setWinterArrivals] = useState([])
   const [isFetching, setIsFetching] = useState(true);
+  
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Notifications name='bell-o' onPress={() => console.log('Pressed!!')}/>
+      ),
+    })
+  }, []);
 
   // fetch flashSales
   useEffect(() => {
     async function getFlashSalesProducts(){
         setIsFetching(true);
-        const response = await fetchFlashSalesProducts();
+        const flashSalesResponse = await fetchFlashSalesProducts();
         setIsFetching(false);
-        setFlashSales(response);
-    };
+        setFlashSales(flashSalesResponse);
+
+      };
     getFlashSalesProducts();
   }, []);
 
@@ -30,10 +46,29 @@ export default function Home() {
       setIsFetching(true);
       const response = await fetchWinterArrivalProducts();
       setIsFetching(false);
-      setWinterArrivals(response)
+      setWinterArrivals(response);
     };
     getWinterArrivals();
   }, []);
+
+  // fetch cartItems
+  useEffect(() => {
+    async function getCartItems(){ 
+      const cartProducts = await fetchCartProducts();
+      dispatch(setCart(cartProducts));
+    }
+    getCartItems();
+  }, []);
+
+  // fetch favourites IDs
+  useEffect(() => {
+    async function getFavourites(){
+      const response = await fetchFavourites();
+      console.log(response);
+    };
+    getFavourites();
+  }, []);
+
 
   let content, secondContent;
   if(isFetching){
@@ -59,6 +94,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: screenWidth < 361? 15: 20,
+    paddingHorizontal: screenWidth < 361? 15: 20,
   },
 })

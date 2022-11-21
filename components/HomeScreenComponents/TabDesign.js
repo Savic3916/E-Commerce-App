@@ -21,6 +21,12 @@ const styles = StyleSheet.create({
         marginRight: 10,
         borderWidth: 2,
         borderColor: Colors.lightGray,
+        elevation: 3,
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 1},
+        shadowOpacity: 0.4,
+        shadowRadius: 3,
+        marginBottom: 10
     },
     pressed: {
         opacity: 0.5,

@@ -23,12 +23,16 @@ const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     discountCard: {
-        marginTop: screenHeight < 712? '6%':'10%',
+        marginTop: screenHeight < 712? '6%':'11%',
         backgroundColor: 'black',
         borderRadius: 10,
         flexDirection: 'row',
         padding: 10,
         elevation: 3,
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 1},
+        shadowOpacity: 0.4,
+        shadowRadius: 3
     },
     innerDiscountContainer: {
        padding: 20,

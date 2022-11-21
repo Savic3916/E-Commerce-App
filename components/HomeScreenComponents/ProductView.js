@@ -10,11 +10,13 @@ export default function ProductView({ productTitle, productObject }) {
       <ScrollView horizontal>
         {productObject.map((value) => {
             return <ContentCard 
-                            key={value.id} 
+                            key={value.id}
+                            id={value.id}
                             source={{uri: value.image}} 
                             price={value.price} 
-                            title={value.title.slice(0, 16)}
+                            title={value.title}
                             rating={value.rating.rate}
+                            count={value.rating.count}
                     />
         })}
       </ScrollView>
@@ -28,8 +30,8 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 10,
   },
-   productTitle: {
-        fontWeight: 'bold',
-        fontSize: screenHeight < 712? 16 : 18,
+  productTitle: {
+    fontWeight: 'bold',
+    fontSize: screenHeight < 712? 16 : 18,
   },
 })

@@ -2,19 +2,35 @@ import { Image, Pressable, StyleSheet, Text, View, Dimensions } from 'react-nati
 import React from 'react';
 
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import Colors from '../../constants/Colors';
 
-export default function ContentCard({ source, title, price, rating, onPress }) {
+export default function ContentCard({ id, source, title, price, rating, count }) {
+
+// react navigation
+const navigation = useNavigation();
+
+// format the title gotten from the Product View screen
+const myTitle = title.slice(0, 16) + '...';
+
   return (
     <View>
         <Pressable 
                 style={({pressed}) => pressed? [styles.contentCard, styles.pressed]: styles.contentCard}
-                onPress={onPress}
+                onPress={() => navigation.navigate('Details', {
+                                                                id: id,
+                                                                source: source, 
+                                                                title: title, 
+                                                                price: price, 
+                                                                rating: rating,
+                                                                count: count,
+                                                              }
+                                                    )}
         >
         <Image source={source} style={styles.image}/>
         </Pressable>
         <View>
-            <Text style={styles.title}> {title} </Text>
+            <Text style={styles.title}> {myTitle} </Text>
             <View style={styles.priceTagView}>
                 <Text style={styles.price}> ${price} </Text>
                 <Text style={styles.rating}> | </Text>
@@ -36,6 +52,7 @@ const styles = StyleSheet.create({
         borderColor: Colors.gray, 
         borderRadius: 5,
         marginRight: 10,
+        alignItems: 'center',
     },
     pressed: {
         opacity: 0.5,
